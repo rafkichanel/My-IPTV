@@ -1,40 +1,34 @@
-oh#EXTM3U
-#EXTENC:UTF-8
-#PLAYLIST:Bang Coy Intro
-#EXTINF:-1 tvg-id="bangcoy" tvg-logo="https://example.com/logo.png" group-title="Special",Selamat Datang di Channel Saya Bang Coy!
-https://www.youtube.com/@bangcoy-c6e?si=YaQn6FJIrjMmH89C
-#EXTINF:-1,Jangan lupa LIKE & SUBSCRIBE!
-https://www.youtube.com/@bangcoy-c6e?si=YaQn6FJIrjMmH89C
-#EXTINF:-1,Update Terbaru Segera Hadir!
-https://www.youtube.com/@bangcoy-c6e?si=YaQn6FJIrjMmH89C
+import requests
+import os
+from datetime import datetime
 
-<=================== INDONESIA =============================>
+# URL playlist IPTV (bit.ly akan redirect)
+PLAYLIST_URL = "https://bit.ly/BrFiDO7"
 
-#EXTINF:-1 tvg-logo="https://www.visionplus.id/images/repository/949/49949-SNAPSHOT-l.png" group-title="INDONESIA",MNC TV (V+)
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=c3004565365a42d08e3bde39a516d64e:dbfdc0967cfbbed01dba730c99d9c14a
-#EXTVLCOPT:http-referrer=https://www.visionplus.id/
-https://d2xz2v5wuvgur6.cloudfront.net/out/v1/d6b026ad50f14b7f9af5ddd5450007d4/index.mpd
+def fetch_playlist():
+    # Ikuti redirect
+    response = requests.head(PLAYLIST_URL, allow_redirects=True)
+    final_url = response.url
+    
+    # Unduh konten playlist
+    playlist = requests.get(final_url)
+    playlist.raise_for_status()
+    
+    return playlist.text
 
-#EXTINF:-1 tvg-logo="https://www.visionplus.id/images/repository/946/49946-SNAPSHOT-l.png" group-title="INDONESIA",RCTI (V+)
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=d386001215594043a8995db796ad9e9c:3404792cb4c804902acdc6ca65c1a298
-#EXTVLCOPT:http-referrer=https://www.visionplus.id/
-https://d2xz2v5wuvgur6.cloudfront.net/out/v1/997ce8767b604fae9fce05379b3b8b3a/index.mpd
+def save_playlist(content):
+    with open("playlist.m3u", "w", encoding="utf-8") as f:
+        f.write(content)
+    
+    # Buat file baca juga
+    with open("LAST_UPDATE.txt", "w") as f:
+        f.write(f"Terakhir diupdate: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')}")
+        f.write(f"\nSumber: {PLAYLIST_URL}")
 
-#EXTINF:-1 tvg-logo="https://www.visionplus.id/images/repository/951/49951-SNAPSHOT-l.png" group-title="INDONESIA",GTV (V+)
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=036e85de0bb448eeb21d39ab300da48e:4c6f9b15dfab2a169b2b78a498c4d77d
-#EXTVLCOPT:http-referrer=https://www.visionplus.id/
-https://d2tjypxxy769fn.cloudfront.net/out/v1/b8b9b1d5f80f45649b4a3619291551ab/index.mpd
-
-#EXTINF:-1 group-title="INDONESIA" tvg-logo="https://www.visionplus.id/images/repository/952/49952-SNAPSHOT-l.png",iNews (V+)
-#KODIPROP:inputstream.adaptive.license_type=clearkey
-#KODIPROP:inputstream.adaptive.license_key=8ee7df15ff584967a3eb7b885bafc71e:9a297bf2200eee7dee21b9ace9f57c77
-#EXTVLCOPT:http-referrer=https://www.visionplus.id/
-https://d2tjypxxy769fn.cloudfront.net/out/v1/7b0404cd6a8a4a908123f10774854e46/index.mpd
-
-#EXTINF:-1 tvg-logo="https://www.mncvision.id/userfiles/image/channel/sctv.png" group-title="INDONESIA",SCTV HD
+if __name__ == "__main__":
+    content = fetch_playlist()
+    save_playlist(content)
+    print(f"Playlist diperbarui! {len(content)} karakter")#EXTINF:-1 tvg-logo="https://www.mncvision.id/userfiles/image/channel/sctv.png" group-title="INDONESIA",SCTV HD
 #KODIPROP:inputstream.adaptive.license_type=clearkey
 #KODIPROP:inputstream.adaptive.license_key=a79a188263724bfcaafc4a7c3b3cd8ce:4d4732d93e6720de0ef884d7106e14f7
 https://atemecdnbalancer-voe.sysln.id/live/eds/SCTVHD/mpd/SCTVHD.mpd
