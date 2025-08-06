@@ -1,4 +1,12 @@
 #EXTM3U
+#EXTENC:UTF-8
+#PLAYLIST:Bang Coy Intro
+#EXTINF:-1 tvg-id="bangcoy" tvg-logo="https://example.com/logo.png" group-title="Special",Selamat Datang di Channel Saya Bang Coy!
+https://www.youtube.com/@bangcoy-c6e?si=YaQn6FJIrjMmH89C
+#EXTINF:-1,Jangan lupa LIKE & SUBSCRIBE!
+https://www.youtube.com/@bangcoy-c6e?si=YaQn6FJIrjMmH89C
+#EXTINF:-1,Update Terbaru Segera Hadir!
+https://www.youtube.com/@bangcoy-c6e?si=YaQn6FJIrjMmH89C
 
 <=================== INDONESIA =============================>
 
