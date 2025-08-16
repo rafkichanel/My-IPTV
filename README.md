@@ -1,6 +1,6 @@
 # 📺 My IPTV Playlist
 
-![Update Playlist](https://github.com/rafkichanel/my-iptv-playlist/actions/workflows/update-playlist.yml/badge.svg)
+![update Playlist](https://github.com/rafkichanel/my-iptv-playlist/actions/workflows/update-playlist.yml/badge.svg)
 
 Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa dijalankan manual dari GitHub Actions ▶️  
 
@@ -8,7 +8,7 @@ Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa 
 
 ## 📂 Playlist
 
-- 🔄 [Update Playlist (manual trigger)](../../actions/workflows/update-playlist.yml)
+- 🔄 [update Playlist (manual trigger)](../../actions/workflows/update-playlist.yml)
 - 📥 [Download Playlist Aktif](https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/master/Finalplay.m3u)
 
 ---
@@ -44,7 +44,7 @@ Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa 
 
 ## 🚀 Roadmap
 
-- [x] Update otomatis playlist  
+- [x] update otomatis playlist  
 - [x] Hitung jumlah channel aktif & mati  
 - [ ] Tambah daftar channel mati ke file terpisah  
 - [ ] Integrasi proxy pool untuk validasi channel  
@@ -64,7 +64,7 @@ Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa 
 
 ## 🚀 Roadmap
 
-- [x] Update otomatis playlist  
+- [x] update otomatis playlist  
 - [x] Hitung jumlah channel aktif & mati  
 - [ ] Tambah daftar channel mati ke file terpisah  
 - [ ] Integrasi proxy pool untuk validasi channel  
