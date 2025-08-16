@@ -1,4 +1,4 @@
-name: Update Playlist
+name: update Playlist
 
 on:
   workflow_dispatch:  # bisa jalan manual
