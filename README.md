@@ -1,7 +1,53 @@
 # 📺 My IPTV Playlist
 
-![Update Playlist](https://github.com/USERNAME/my-iptv-playlist/actions/workflows/update.yml/badge.svg)
+![Update Playlist](https://github.com/rafkichanel/my-iptv-playlist/actions/workflows/update-playlist.yml/badge.svg)
 
-🔗 [Download Playlist Aktif](https://USERNAME.github.io/my-iptv-playlist/Finalplay.m3u)  
-❌ [Daftar Channel Mati](https://USERNAME.github.io/my-iptv-playlist/dead_channels.txt)  
-📦 [Latest Release](https://github.com/USERNAME/my-iptv-playlist/releases/latest)
+Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa dijalankan manual dari GitHub Actions ▶️  
+
+---
+
+## 📂 Playlist
+
+- 🔄 [Update Playlist (manual trigger)](../../actions/workflows/update-playlist.yml)
+- 📥 [Download Playlist Aktif](https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/master/Finalplay.m3u)
+
+---
+
+## 📊 Statistik (update otomatis)
+
+- ✅ Aktif: 0  
+- ❌ Mati: 0  
+- ⏱️ Terakhir update: *Belum ada update*  
+
+> Bagian ini akan diperbarui otomatis oleh script `Update_playlist.js` setelah workflow jalan 🚀
+
+---
+
+## ⚙️ Cara Pakai
+
+1. Buka aplikasi IPTV Player favorit kamu:
+   - 📺 OTT Navigator  
+   - 📺 Tivimate  
+   - 🎥 VLC  
+   - 📱 atau aplikasi IPTV lainnya  
+3. Playlist akan otomatis diperbarui tiap jam oleh GitHub Actions ✅  
+
+---
+
+## 🛠️ Automasi
+
+- Workflow: [`update-playlist.yml`](.github/workflows/update-playlist.yml)  
+- Jalan otomatis tiap **jam** dengan cron ⏰  
+- Bisa juga dijalankan manual dari tab **Actions** ▶️  
+
+---
+
+## 🚀 Roadmap
+
+- [x] Update otomatis playlist  
+- [x] Hitung jumlah channel aktif & mati  
+- [ ] Tambah daftar channel mati ke file terpisah  
+- [ ] Integrasi proxy pool untuk validasi channel  
+- [ ] Auto-push ke Telegram/Discord tiap update
+2. Masukkan link berikut agar playlist selalu update otomatis:https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/master/Finalplay.m3u
+3. 
