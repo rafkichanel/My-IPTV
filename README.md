@@ -50,4 +50,22 @@ Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa 
 - [ ] Integrasi proxy pool untuk validasi channel  
 - [ ] Auto-push ke Telegram/Discord tiap update
 2. Masukkan link berikut agar playlist selalu update otomatis:https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/master/Finalplay.m3u
-3. 
+3. 3. Playlist akan otomatis diperbarui tiap jam oleh GitHub Actions ✅  
+
+---
+
+## 🛠️ Automasi
+
+- Workflow: [`update-playlist.yml`](.github/workflows/update-playlist.yml)  
+- Jalan otomatis tiap **jam** dengan cron ⏰  
+- Bisa juga dijalankan manual dari tab **Actions** ▶️  
+
+---
+
+## 🚀 Roadmap
+
+- [x] Update otomatis playlist  
+- [x] Hitung jumlah channel aktif & mati  
+- [ ] Tambah daftar channel mati ke file terpisah  
+- [ ] Integrasi proxy pool untuk validasi channel  
+- [ ] Auto-push ke Telegram/Discord tiap update
