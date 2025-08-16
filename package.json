@@ -1,0 +1,12 @@
+{
+  "name": "my-iptv-playlist",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "updatePlaylist.js",
+  "scripts": {
+    "start": "node updatePlaylist.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7"
+  }
+}
