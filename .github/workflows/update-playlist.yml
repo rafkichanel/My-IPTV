@@ -1,33 +1,41 @@
-name: update Playlist
+name: Update IPTV Playlist
 
 on:
-  workflow_dispatch:  # bisa jalan manual
   schedule:
-    - cron: "0 * * * *"  # jalan tiap jam
+    - cron: '0 * * * *'  # setiap 1 jam sekali
+  workflow_dispatch:      # bisa juga dijalankan manual lewat GitHub UI
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  update-playlist:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: '18'
 
       - name: Install dependencies
-        run: npm install node-fetch@2
+        run: npm install
 
-      - name: Run update script
-        run: node Update_playlist.js
+      - name: Run update_playlist.js
+        run: npm start
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add Finalplay.m3u README.md
-          git commit -m "Auto update playlist & stats $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-          git push
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Finalplay.m3u
+          if git diff --cached --quiet; then
+            echo "No changes detected, skip commit"
+          else
+            git commit -m "Update playlist otomatis via GitHub Actions"
+            git push
+          fi
+        continue-on-error: true
