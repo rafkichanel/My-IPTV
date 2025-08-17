@@ -42,6 +42,13 @@ const main = async () => {
             const response = await axios.get(url, { timeout: 15000 });
             const lines = response.data.split('\n');
 
+            // --- Bagian filter dari skrip Python dihilangkan
+            // Filter: hapus baris yang mengandung 'WHATSAPP'
+            // lines = [line for line in lines if "WHATSAPP" not in line.upper()]
+            // Filter: hilangkan ikon 🔴 dari sumber ke-3
+            // if idx === 2 { lines = lines.map(line => line.replace("🔴", "")); }
+            // ---
+
             let extinfLine = null;
             for (const line of lines) {
                 const trimmedLine = line.trim();
@@ -50,6 +57,7 @@ const main = async () => {
                 } else if (trimmedLine && !trimmedLine.startsWith("#")) {
                     if (extinfLine) {
                         const channelUrl = trimmedLine;
+                        // --- Logika Dedup ---
                         if (!seenUrls.has(channelUrl)) {
                             seenUrls.add(channelUrl);
                             allChannels.push({
@@ -57,6 +65,7 @@ const main = async () => {
                                 url: channelUrl
                             });
                         }
+                        // --- Akhir Logika Dedup ---
                         extinfLine = null;
                     }
                 }
@@ -127,3 +136,4 @@ const main = async () => {
 };
 
 main();
+        
