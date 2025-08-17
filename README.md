@@ -1,71 +1,55 @@
 # 📺 My IPTV Playlist
 
-![update Playlist](https://github.com/rafkichanel/my-iptv-playlist/actions/workflows/update-playlist.yml/badge.svg)
+Koleksi playlist IPTV pribadi dengan update berkala.
 
-Koleksi playlist IPTV pribadi dengan **update otomatis tiap jam** ⏰ atau bisa dijalankan manual dari GitHub Actions ▶️  
-
----
-
-## 📂 Playlist
-
-- 🔄 [update Playlist (manual trigger)](../../actions/workflows/update-playlist.yml)
-- 📥 [Download Playlist Aktif](https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/master/Finalplay.m3u)
+![Update Playlist](https://github.com/rafkichanel/my-iptv-playlist/actions/workflows/update-playlist.yml/badge.svg)
 
 ---
 
-## 📊 Statistik (update otomatis)
+### 📝 Deskripsi Proyek
 
-- ✅ Aktif: 0  
-- ❌ Mati: 0  
-- ⏱️ Terakhir update: *Belum ada update*  
+Proyek ini adalah repositori pribadi yang digunakan untuk mengelola dan memperbarui daftar channel IPTV secara otomatis. Skrip akan mengunduh daftar channel dari berbagai sumber, menyaring channel yang tidak aktif, dan menggabungkannya ke dalam satu file playlist (`Finalplay.m3u`) yang bersih dan terorganisir.
 
-> Bagian ini akan diperbarui otomatis oleh script `Update_playlist.js` setelah workflow jalan 🚀
+### ⚙️ Cara Kerja
 
----
+1.  **Pengambilan Sumber**: Skrip mengambil daftar URL sumber dari file `sources.txt`.
+2.  **Pemrosesan**: Setiap sumber diunduh, dan channel yang ditemukan akan diproses. Channel duplikat akan dihapus untuk menjaga daftar tetap unik.
+3.  **Verifikasi**: Skrip memeriksa setiap channel untuk memastikan channel tersebut hidup dan dapat diakses.
+4.  **Pengorganisasian**: Channel yang hidup dikelompokkan dan disusun ulang, dengan channel "LIVE EVENT" ditempatkan di bagian atas.
+5.  **Pembaruan Otomatis**: GitHub Actions akan menjalankan skrip ini secara otomatis setiap satu jam, memastikan playlist selalu diperbarui dengan channel terbaru.
 
-## ⚙️ Cara Pakai
+### 🚀 Cara Menggunakan
 
-1. Buka aplikasi IPTV Player favorit kamu:
-   - 📺 OTT Navigator  
-   - 📺 Tivimate  
-   - 🎥 VLC  
-   - 📱 atau aplikasi IPTV lainnya  
-3. Playlist akan otomatis diperbarui tiap jam oleh GitHub Actions ✅  
+Anda bisa menggunakan file `Finalplay.m3u` ini di pemutar IPTV pilihan Anda (seperti VLC, Kodi, atau aplikasi IPTV lainnya).
 
----
+Berikut adalah URL langsung menuju playlist:
 
-## 🛠️ Automasi
+`https://raw.githubusercontent.com/nama-pengguna-anda/nama-repo-anda/main/Finalplay.m3u`
 
-- Workflow: [`update-playlist.yml`](.github/workflows/update-playlist.yml)  
-- Jalan otomatis tiap **jam** dengan cron ⏰  
-- Bisa juga dijalankan manual dari tab **Actions** ▶️  
+**Catatan**: Ganti `nama-pengguna-anda` dan `nama-repo-anda` dengan username dan nama repositori Anda.
 
 ---
 
-## 🚀 Roadmap
+### 📂 Struktur Repositori
 
-- [x] update otomatis playlist  
-- [x] Hitung jumlah channel aktif & mati  
-- [ ] Tambah daftar channel mati ke file terpisah  
-- [ ] Integrasi proxy pool untuk validasi channel  
-- [ ] Auto-push ke Telegram/Discord tiap update
-2. Masukkan link berikut agar playlist selalu update otomatis:https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/master/Finalplay.m3u
-3. 3. Playlist akan otomatis diperbarui tiap jam oleh GitHub Actions ✅  
-
----
-
-## 🛠️ Automasi
-
-- Workflow: [`update-playlist.yml`](.github/workflows/update-playlist.yml)  
-- Jalan otomatis tiap **jam** dengan cron ⏰  
-- Bisa juga dijalankan manual dari tab **Actions** ▶️  
+.
+├── .github/
+│   └── workflows/
+│       └── update-playlist.yml  # File konfigurasi GitHub Actions
+├── Finalplay.m3u                # Output playlist yang dihasilkan
+├── package.json                 # Dependensi Node.js
+├── README.md                    # File ini
+└── sources.txt                  # Daftar URL sumber playlist
+└── update_playlist.js           # Skrip utama untuk memperbarui playlist
 
 ---
 
-## 🚀 Roadmap
+### 🤝 Kontribusi
 
-- [x] update otomatis playlist  
-- [x] Hitung jumlah channel aktif & mati  
-- [ ] Tambah daftar channel mati ke file terpisah  
-- [ ] Integrasi proxy pool untuk validasi channel  
-- [ ] Auto-push ke Telegram/Discord tiap update
+Proyek ini bersifat pribadi, tetapi jika Anda menemukan masalah atau memiliki saran, silakan buka issue atau fork repositori ini.
+
+---
+
+### 📜 Lisensi
+
+Proyek ini di bawah lisensi MIT.
