@@ -26,6 +26,8 @@ jobs:
 
       - name: Run update_playlist.js
         run: npm start
+        env:
+          TIMEOUT: 5  # Mengatur timeout pengecekan channel menjadi 5 detik
 
       - name: Commit and push changes
         run: |
