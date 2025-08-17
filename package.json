@@ -1,12 +1,12 @@
 {
-  "name": "my-iptv-playlist",
+  "name": "my-iptv-playlist-updater",
   "version": "1.0.0",
-  "type": "module",
-  "main": "updatePlaylist.js",
+  "description": "A script to update an IPTV playlist",
+  "main": "update_playlist.js",  // Ubah jalur ke root
   "scripts": {
-    "start": "node updatePlaylist.js"
+    "start": "node update_playlist.js" // Ubah perintah
   },
   "dependencies": {
-    "axios": "^1.7.7"
+    "axios": "^1.6.8"
   }
 }
