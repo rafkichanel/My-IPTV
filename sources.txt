@@ -1,2 +1,2 @@
 https://raw.githubusercontent.com/rafkichanel/my-iptv-playlist/refs/heads/master/scripts/Finalplay.m3u
-https://bit.ly/pengembrahitam
+
