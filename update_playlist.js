@@ -1,12 +1,10 @@
 const fs = require('fs');
 const axios = require('axios');
 const simpleGit = require('simple-git');
-const path = require('path');
 
-const MAIN_FILE = process.env.MAIN_FILE || "Finalplay.m3u";
+const MAIN_FILE = "Playlist2";
 const SOURCES_FILE = process.env.SOURCES_FILE || "sources.txt";
 
-// Fungsi utama
 const main = async () => {
     let sources;
     try {
@@ -60,15 +58,17 @@ const main = async () => {
     await autoCommitAndPush();
 };
 
-// Fungsi commit dan push ke GitHub
 const autoCommitAndPush = async () => {
     const git = simpleGit();
+
+    // Setup remote dengan token autentikasi
     const remoteUrl = `https://${process.env.GH_USERNAME}:${process.env.GH_TOKEN}@github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}.git`;
 
     try {
+        // Tambah remote origin kalau belum ada
         await git.addRemote('origin', remoteUrl).catch(() => {});
-        await git.add('.');
-        await git.commit('🔄 Update Finalplay.m3u (no filter)');
+        await git.add(MAIN_FILE);
+        await git.commit('🔄 Update Playlist2');
         await git.push('origin', 'master');
         console.log("✅ Berhasil push ke GitHub!");
     } catch (error) {
