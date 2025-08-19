@@ -3,8 +3,11 @@ name: Auto Generate and Commit Finalplay.m3u
 on:
   workflow_dispatch:
   push:
+    branches:
+      - master
     paths:
       - sources.txt
+      - update_playlist.js
       - .github/workflows/auto-commit.yml
 
 jobs:
@@ -14,6 +17,8 @@ jobs:
     steps:
       - name: 📥 Checkout repo
         uses: actions/checkout@v3
+        with:
+          ref: master  # ✅ Checkout branch 'master'
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
@@ -23,9 +28,9 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      - name: ▶️ Run script
+      - name: ▶️ Run update_playlist.js
         env:
-          GH_TOKEN: ${{ secrets.NODEJS }}       # Token dari GitHub Secrets
+          GH_TOKEN: ${{ secrets.NODEJS }}       # Secret token GitHub kamu
           GH_USERNAME: yourusername             # Ganti dengan username GitHub kamu
-          GH_REPO: your-repo-name               # Ganti dengan nama repositori kamu
-        run: node script.js                     # ⬅️ BARIS INI SUDAH DIBERSIHKAN
+          GH_REPO: your-repo-name               # Ganti dengan nama repo kamu
+        run: node update_playlist.js
