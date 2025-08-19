@@ -25,7 +25,7 @@ jobs:
 
       - name: ▶️ Run script
         env:
-          GH_TOKEN: ${{ secrets.NODEJS }}
-          GH_USERNAME: yourusername           # Ganti dengan username GitHub kamu
-          GH_REPO: your-repo-name             # Ganti dengan nama repositori kamu
-        run: node script.js￼Enter
+          GH_TOKEN: ${{ secrets.NODEJS }}       # Token dari GitHub Secrets
+          GH_USERNAME: yourusername             # Ganti dengan username GitHub kamu
+          GH_REPO: your-repo-name               # Ganti dengan nama repositori kamu
+        run: node script.js                     # ⬅️ BARIS INI SUDAH DIBERSIHKAN
