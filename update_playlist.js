@@ -1,21 +1,20 @@
+require('dotenv').config();
 const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
+const simpleGit = require('simple-git');
 
 const MAIN_FILE = process.env.MAIN_FILE || "Finalplay.m3u";
 const SOURCES_FILE = process.env.SOURCES_FILE || "sources.txt";
-const TIMEOUT = parseInt(process.env.TIMEOUT || "10", 10);
+const TIMEOUT = parseInt(process.env.TIMEOUT || "10", 10) * 1000;
 const MAX_WORKERS = parseInt(process.env.MAX_WORKERS || "50", 10);
 
-// Fungsi untuk memeriksa status channel
+// Cek status channel
 const checkChannel = async (url, attempts = 3) => {
     for (let i = 0; i < attempts; i++) {
         try {
             await axios.head(url, { timeout: TIMEOUT, maxRedirects: 10 });
             return true;
-        } catch (error) {
-            continue;
-        }
+        } catch (_) {}
     }
     return false;
 };
@@ -42,13 +41,6 @@ const main = async () => {
             const response = await axios.get(url, { timeout: 15000 });
             const lines = response.data.split('\n');
 
-            // --- Bagian filter dari skrip Python dihilangkan
-            // Filter: hapus baris yang mengandung 'WHATSAPP'
-            // lines = [line for line in lines if "WHATSAPP" not in line.upper()]
-            // Filter: hilangkan ikon 🔴 dari sumber ke-3
-            // if idx === 2 { lines = lines.map(line => line.replace("🔴", "")); }
-            // ---
-
             let extinfLine = null;
             for (const line of lines) {
                 const trimmedLine = line.trim();
@@ -57,7 +49,6 @@ const main = async () => {
                 } else if (trimmedLine && !trimmedLine.startsWith("#")) {
                     if (extinfLine) {
                         const channelUrl = trimmedLine;
-                        // --- Logika Dedup ---
                         if (!seenUrls.has(channelUrl)) {
                             seenUrls.add(channelUrl);
                             allChannels.push({
@@ -65,7 +56,6 @@ const main = async () => {
                                 url: channelUrl
                             });
                         }
-                        // --- Akhir Logika Dedup ---
                         extinfLine = null;
                     }
                 }
@@ -75,65 +65,51 @@ const main = async () => {
         }
     }
 
-    if (allChannels.length === 0) {
-        console.log("\n❗ Tidak ada channel yang ditemukan dari sumber. Proses dihentikan.");
-        process.exit(0);
-    }
+    console.log(`✅ Total channel unik: ${allChannels.length}`);
+    console.log(`⏳ Memeriksa channel aktif...`);
 
-    console.log(`\n🔍 Memeriksa status ${allChannels.length} channel dengan ${MAX_WORKERS} thread...`);
-    
-    let aliveChannels = [];
-    let deadCount = 0;
-    
-    const checkPromises = allChannels.map(channel => checkChannel(channel.url).then(isAlive => ({ channel, isAlive })));
-    const results = await Promise.all(checkPromises);
+    const results = [];
+    let activeCount = 0;
 
-    for (const { channel, isAlive } of results) {
-        if (isAlive) {
-            console.log(`✅ Channel hidup: ${channel.url}`);
-            aliveChannels.push(channel);
-        } else {
-            console.log(`❌ Channel mati: ${channel.url}`);
-            deadCount++;
+    const worker = async (channel) => {
+        const isActive = await checkChannel(channel.url);
+        if (isActive) {
+            results.push(`${channel.extinf}\n${channel.url}`);
+            activeCount++;
         }
-    }
+    };
 
-    console.log("\n==========================");
-    console.log("📊 Statistik:");
-    console.log(`🔢 Total channel: ${allChannels.length}`);
-    console.log(`✅ Channel hidup: ${aliveChannels.length}`);
-    console.log(`❌ Channel mati: ${deadCount}`);
-    console.log("==========================");
-
-    // Bagian Pengelompokan dan Penyusunan Ulang
-    const liveEventChannels = [];
-    const otherChannels = [];
-    const liveEventRegex = /group-title="LIVE EVENT"|group-title="SEDANG LIVE"/i;
-
-    for (const channel of aliveChannels) {
-        if (liveEventRegex.test(channel.extinf)) {
-            liveEventChannels.push(channel);
-        } else {
-            otherChannels.push(channel);
+    const queue = [...allChannels];
+    const workers = Array.from({ length: MAX_WORKERS }, async () => {
+        while (queue.length > 0) {
+            const item = queue.pop();
+            if (item) await worker(item);
         }
-    }
+    });
 
-    for (const channel of liveEventChannels) {
-        channel.extinf = channel.extinf.replace(/group-title="SEDANG LIVE"/i, 'group-title="LIVE EVENT"');
-    }
+    await Promise.all(workers);
 
-    const finalPlaylist = ["#EXTM3U", ...liveEventChannels.flatMap(ch => [ch.extinf, ch.url]), ...otherChannels.flatMap(ch => [ch.extinf, ch.url])];
+    fs.writeFileSync(MAIN_FILE, "#EXTM3U\n" + results.join('\n') + "\n", 'utf-8');
+    console.log(`✅ Selesai! ${activeCount} channel aktif disimpan ke '${MAIN_FILE}'`);
+
+    await autoCommitAndPush();
+};
+
+// Commit & push otomatis ke GitHub
+const autoCommitAndPush = async () => {
+    const git = simpleGit();
+
+    const remoteUrl = `https://${process.env.GH_USERNAME}:${process.env.GH_TOKEN}@github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}.git`;
 
     try {
-        fs.writeFileSync(MAIN_FILE, finalPlaylist.join('\n'), 'utf-8');
-        console.log(`✅ Playlist diperbarui dan disimpan ke ${MAIN_FILE}`);
+        await git.addRemote('origin', remoteUrl).catch(() => {}); // Jika remote sudah ada, abaikan
+        await git.add('.');
+        await git.commit('🔄 Update Finalplay.m3u (auto)');
+        await git.push('origin', 'main'); // Ubah 'main' jika kamu pakai 'master'
+        console.log("✅ Berhasil push ke GitHub!");
     } catch (error) {
-        console.error(`⚠️ Gagal menulis file: ${error.message}`);
-        process.exit(1);
+        console.error("❌ Gagal push ke GitHub:", error.message);
     }
-
-    console.log("\n✅ Skrip selesai. Biarkan GitHub Actions melanjutkan proses Git.");
 };
 
 main();
-        
