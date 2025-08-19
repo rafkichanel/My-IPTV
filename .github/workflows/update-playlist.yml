@@ -1,4 +1,4 @@
-name: Auto Generate and Commit Finalplay.m3u
+herename: Auto Generate and Commit Playlist2
 
 on:
   workflow_dispatch:
@@ -30,7 +30,7 @@ jobs:
 
       - name: ▶️ Run update_playlist.js
         env:
-          GH_TOKEN: ${{ secrets.NODEJS }}        # Token GitHub disimpan di Secrets
-          GH_USERNAME: yourusername              # Ganti dengan username GitHub kamu
-          GH_REPO: your-repo-name                # Ganti dengan nama repo kamu
+          GH_TOKEN: ${{ secrets.NODEJS }}      # Token GitHub PAT di Secrets
+          GH_USERNAME: yourusername            # Ganti dengan username GitHub kamu
+          GH_REPO: your-repo-name              # Ganti dengan nama repo kamu
         run: node update_playlist.js
