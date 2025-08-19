@@ -1,9 +1,9 @@
 {
   "name": "iptv-script",
   "version": "1.0.0",
-  "main": "script.js",
+  "main": "update_playlist.js",
   "scripts": {
-    "start": "node script.js"
+    "start": "node update_playlist.js"
   },
   "dependencies": {
     "axios": "^1.6.0",
