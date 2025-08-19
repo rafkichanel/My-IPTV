@@ -18,7 +18,7 @@ jobs:
       - name: 📥 Checkout repo
         uses: actions/checkout@v3
         with:
-          ref: master  # ✅ Checkout branch 'master'
+          ref: master
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
@@ -30,7 +30,7 @@ jobs:
 
       - name: ▶️ Run update_playlist.js
         env:
-          GH_TOKEN: ${{ secrets.NODEJS }}       # Secret token GitHub kamu
-          GH_USERNAME: yourusername             # Ganti dengan username GitHub kamu
-          GH_REPO: your-repo-name               # Ganti dengan nama repo kamu
+          GH_TOKEN: ${{ secrets.NODEJS }}        # Token GitHub disimpan di Secrets
+          GH_USERNAME: yourusername              # Ganti dengan username GitHub kamu
+          GH_REPO: your-repo-name                # Ganti dengan nama repo kamu
         run: node update_playlist.js
