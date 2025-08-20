@@ -1,10 +1,56 @@
 const fs = require('fs');
 const axios = require('axios');
 const simpleGit = require('simple-git');
+const path = require('path');
+require('dotenv').config();
 
-const MAIN_FILE = "Playlist2";
-const SOURCES_FILE = process.env.SOURCES_FILE || "sources.txt";
+const MAIN_FILE = "Playlist2"; // Output final
+const SOURCES_FILE = "sources.txt";
+const TIMEOUT = parseInt(process.env.TIMEOUT || "10000", 10); // default 10 detik
+const MAX_ATTEMPTS = 3;
 
+// Fungsi untuk cek URL channel (tidak dipakai kalau tanpa filter)
+const checkChannel = async (url, attempts = MAX_ATTEMPTS) => {
+    for (let i = 0; i < attempts; i++) {
+        try {
+            await axios.head(url, { timeout: TIMEOUT, maxRedirects: 10 });
+            return true;
+        } catch (error) {
+            continue;
+        }
+    }
+    return false;
+};
+
+// Fungsi auto commit & push ke GitHub
+const autoCommitAndPush = async () => {
+    const git = simpleGit();
+    const remoteUrl = `https://${process.env.GH_USERNAME}:${process.env.GH_TOKEN}@github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}.git`;
+
+    try {
+        const remotes = await git.getRemotes(true);
+        const hasOrigin = remotes.some(remote => remote.name === 'origin');
+
+        if (!hasOrigin) {
+            await git.addRemote('origin', remoteUrl);
+        } else {
+            await git.remote(['set-url', 'origin', remoteUrl]);
+        }
+
+        console.log("📂 Commit file:", MAIN_FILE);
+
+        await git.add(MAIN_FILE);
+        await git.commit('🔄 Update Playlist2', undefined, { '--allow-empty': null });
+        await git.push('origin', 'master');
+
+        const log = await git.log();
+        console.log("✅ Commit terbaru:", log.latest.message);
+    } catch (error) {
+        console.error("❌ Gagal push ke GitHub:", error.message);
+    }
+};
+
+// Fungsi utama
 const main = async () => {
     let sources;
     try {
@@ -25,18 +71,18 @@ const main = async () => {
 
     for (const [idx, url] of sources.entries()) {
         try {
-            console.log(`🔗 Mengunduh sumber ${idx + 1}: ${url}`);
+            console.log(`🌐 Mengambil dari sumber ${idx + 1}: ${url}`);
             const response = await axios.get(url, { timeout: 15000 });
             const lines = response.data.split('\n');
 
             let extinfLine = null;
             for (const line of lines) {
-                const trimmedLine = line.trim();
-                if (trimmedLine.startsWith("#EXTINF")) {
-                    extinfLine = trimmedLine;
-                } else if (trimmedLine && !trimmedLine.startsWith("#")) {
+                const trimmed = line.trim();
+                if (trimmed.startsWith("#EXTINF")) {
+                    extinfLine = trimmed;
+                } else if (trimmed && !trimmed.startsWith("#")) {
                     if (extinfLine) {
-                        const channelUrl = trimmedLine;
+                        const channelUrl = trimmed;
                         if (!seenUrls.has(channelUrl)) {
                             seenUrls.add(channelUrl);
                             allChannels.push(`${extinfLine}\n${channelUrl}`);
@@ -50,30 +96,19 @@ const main = async () => {
         }
     }
 
-    console.log(`✅ Total channel unik: ${allChannels.length}`);
+    console.log(`📺 Total channel berhasil diproses: ${allChannels.length}`);
 
-    fs.writeFileSync(MAIN_FILE, "#EXTM3U\n" + allChannels.join('\n') + "\n", 'utf-8');
-    console.log(`✅ Playlist disimpan ke '${MAIN_FILE}'`);
+    try {
+        fs.writeFileSync(MAIN_FILE, "#EXTM3U\n" + allChannels.join('\n') + "\n", 'utf-8');
+        console.log(`✅ File '${MAIN_FILE}' berhasil ditulis.`);
+    } catch (error) {
+        console.error(`❌ Gagal menulis file '${MAIN_FILE}':`, error.message);
+        process.exit(1);
+    }
 
+    // Push ke GitHub
     await autoCommitAndPush();
 };
 
-const autoCommitAndPush = async () => {
-    const git = simpleGit();
-
-    // Setup remote dengan token autentikasi
-    const remoteUrl = `https://${process.env.GH_USERNAME}:${process.env.GH_TOKEN}@github.com/${process.env.GH_USERNAME}/${process.env.GH_REPO}.git`;
-
-    try {
-        // Tambah remote origin kalau belum ada
-        await git.addRemote('origin', remoteUrl).catch(() => {});
-        await git.add(MAIN_FILE);
-        await git.commit('🔄 Update Playlist2');
-        await git.push('origin', 'master');
-        console.log("✅ Berhasil push ke GitHub!");
-    } catch (error) {
-        console.error("❌ Gagal push ke GitHub:", error.message);
-    }
-};
-
+// Jalankan
 main();
