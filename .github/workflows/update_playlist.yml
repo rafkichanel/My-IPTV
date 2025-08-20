@@ -1,0 +1,34 @@
+name: Update Playlist
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.NODEJS }}
+      GH_USERNAME: rafkichanel
+      GH_REPO: My-IPTV
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          cd scripts
+          npm install
+
+      - name: Run update script
+        run: |
+          cd scripts
+          npm start
