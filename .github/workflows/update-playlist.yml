@@ -26,4 +26,4 @@ jobs:
         run: npm install axios simple-git
 
       - name: Run update_playlist.js
-        run: node update_playlist.js￼Enter
+        run: node update_playlist.js
