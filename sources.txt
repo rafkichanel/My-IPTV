@@ -1,1 +1,8 @@
 https://raw.githubusercontent.com/iptv-org/iptv/master/index.m3u
+https://raw.githubusercontent.com/iptv-org/iptv/master/streams/iptv.m3u
+https://raw.githubusercontent.com/iptv-org/iptv/master/streams/tv.m3u
+https://raw.githubusercontent.com/iptv-org/iptv/master/streams/radio.m3u
+https://raw.githubusercontent.com/iptv-org/iptv/master/streams/other.m3u
+https://iptv-org.github.io/iptv/categories/news.m3u
+https://iptv-org.github.io/iptv/categories/sport.m3u
+https://iptv-org.github.io/iptv/categories/entertainment.m3u
