@@ -1,21 +1,21 @@
-herename: Auto Generate and Commit Playlist2
+name: Update Playlist
 
 on:
-  workflow_dispatch:
-  push:
+  workflow_dispatch:  # Bisa dijalankan manual dari tab Actions
+  push:               # Juga berjalan otomatis saat ada perubahan di file penting
     branches:
       - master
     paths:
       - sources.txt
       - update_playlist.js
-      - .github/workflows/auto-commit.yml
+      - .github/workflows/update_playlist.yml
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repo
+      - name: 📥 Checkout repository
         uses: actions/checkout@v3
         with:
           ref: master
@@ -28,9 +28,9 @@ jobs:
       - name: 📦 Install dependencies
         run: npm install
 
-      - name: ▶️ Run update_playlist.js
+      - name: ▶️ Jalankan update_playlist.js
         env:
-          GH_TOKEN: ${{ secrets.NODEJS }}      # Token GitHub PAT di Secrets
-          GH_USERNAME: yourusername            # Ganti dengan username GitHub kamu
-          GH_REPO: your-repo-name              # Ganti dengan nama repo kamu
+          GH_TOKEN: ${{ secrets.NODEJS }}          # Token GitHub (dari Secrets)
+          GH_USERNAME: rafkichanel                 # GANTI dengan username GitHub kamu
+          GH_REPO: My-IPTV                         # GANTI dengan nama repository kamu
         run: node update_playlist.js
