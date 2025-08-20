@@ -1,36 +1,29 @@
 name: Update Playlist
 
 on:
-  workflow_dispatch:  # Bisa dijalankan manual dari tab Actions
-  push:               # Juga berjalan otomatis saat ada perubahan di file penting
+  push:
     branches:
       - master
-    paths:
-      - sources.txt
-      - update_playlist.js
-      - .github/workflows/update_playlist.yml
+  workflow_dispatch:
 
 jobs:
-  build:
+  update:
     runs-on: ubuntu-latest
-
+    env:
+      GH_TOKEN: ${{ secrets.NODEJS }}
+      GH_USERNAME: rafkichanel
+      GH_REPO: My-IPTV
     steps:
-      - name: 📥 Checkout repository
+      - name: Checkout Repo
         uses: actions/checkout@v3
-        with:
-          ref: master
 
-      - name: 🟢 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      - name: 📦 Install dependencies
-        run: npm install
+      - name: Install Dependencies
+        run: npm install axios simple-git
 
-      - name: ▶️ Jalankan update_playlist.js
-        env:
-          GH_TOKEN: ${{ secrets.NODEJS }}          # Token GitHub (dari Secrets)
-          GH_USERNAME: rafkichanel                 # GANTI dengan username GitHub kamu
-          GH_REPO: My-IPTV                         # GANTI dengan nama repository kamu
-        run: node update_playlist.js
+      - name: Run update_playlist.js
+        run: node update_playlist.js￼Enter
